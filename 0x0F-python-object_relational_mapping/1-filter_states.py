@@ -1,33 +1,38 @@
 #!/usr/bin/python3
-
 """
-    A script that lists all states from the database hbtn_0e_0_usa
-    starting with capital letter N
-    Username, password and database names are given as user args
+Lists all states with a name starting with N (upper N) from the database
+hbtn_0e_0_usa sorted in ascending order by states.id
 """
-
-
-import sys
 import MySQLdb
+import sys
 
 
-if __name__ == '__main__':
-    db = MySQLdb.connect(user=sys.argv[1],
-                         passwd=sys.argv[2],
-                         db=sys.argv[3],
-                         host='localhost',
-                         port=3306)
+if __name__ == "__main__":
 
-    cursor = db.cursor()
+    mysql_username = sys.argv[1]
+    mysql_password = sys.argv[2]
+    db_name = sys.argv[3]
 
-    cursor.execute("SELECT * FROM states\
-                    WHERE name LIKE BINARY 'N%'\
-                    ORDER BY id ASC")
+    try:
+        conn = MySQLdb.connect(
+            host="localhost",
+            port=3306,
+            user=mysql_username,
+            passwd=mysql_password,
+            db=db_name,
+            charset="utf8"
+        )
+    except MySQLdb.Error as e:
+        print("Error connecting to database: {}".format(e))
+        sys.exit(1)
 
-    data = cursor.fetchall()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM states WHERE name LIKE BINARY 'N%' \
+                ORDER BY states.id ASC")
+    rows = cur.fetchall()
 
-    for row in data:
+    for row in rows:
         print(row)
 
-    cursor.close()
-    db.close()
+    cur.close()
+    conn.close()
