@@ -1,14 +1,8 @@
 #!/usr/bin/python3
-"""Fetches header"""
+"""Displays the value of the X-Request-Id variable
+found in the header of the response"""
 import urllib.request
-import sys
-
-
-def fetcher():
-    """fetcher"""
-    with urllib.request.urlopen(sys.argv[1]) as response:
-        header = response.info()
-        print(header["X-Request-Id"])
-
+from sys import argv
 if __name__ == "__main__":
-    fetcher()
+    with urllib.request.urlopen(argv[1]) as response:
+        print(response.headers['X-Request-Id'])
