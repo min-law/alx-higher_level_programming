@@ -1,19 +1,24 @@
 #!/usr/bin/node
-// JS Script
-require('request').get(process.argv[2], function (err, r, body) {
-  if (err) {
-    console.log(err);
-  } else {
-    let counter = 0;
-    let data = JSON.parse(body).results;
-    for (let i = 0; i < data.length; i++) {
-      for (let n = 0; n < data[i].characters.length; n++) {
-        if (data[i].characters[n].includes('/18/')) {
-          counter++;
-          break;
-        }
+
+const request = require('request');
+const starWarsUri = process.argv[2];
+let times = 0;
+
+request(starWarsUri, function (_err, _res, body) {
+  body = JSON.parse(body).results;
+
+  for (let i = 0; i < body.length; ++i) {
+    const characters = body[i].characters;
+
+    for (let j = 0; j < characters.length; ++j) {
+      const character = characters[j];
+      const characterId = character.split('/')[5];
+
+      if (characterId === '18') {
+        times += 1;
       }
     }
-    console.log(counter);
   }
+
+  console.log(times);
 });
