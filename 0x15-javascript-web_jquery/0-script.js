@@ -1,0 +1,4 @@
+//A JavaScript script that updates the text color of the <header> element to red
+
+const colorHd = document.querySelector('header');
+colorHd.style.color  = '#FF0000';
